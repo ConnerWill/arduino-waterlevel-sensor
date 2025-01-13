@@ -27,10 +27,10 @@ void loop() {
   digitalWrite(POWER_PIN, LOW);   // turn the sensor OFF
 
   if (value > THRESHOLD) {
-    Serial.print("The water is detected");
-    digitalWrite(LED_PIN, HIGH);  // turn LED ON
-  } else {
+    Serial.print("Water is detected");
     digitalWrite(LED_PIN, LOW);   // turn LED OFF
+  } else {
+    Serial.print("Water is NOT detected");
+    digitalWrite(LED_PIN, HIGH);  // turn LED ON
   }
 }
-
