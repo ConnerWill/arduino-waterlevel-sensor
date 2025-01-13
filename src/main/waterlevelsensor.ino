@@ -1,12 +1,14 @@
 /*
- *
- *
-*/
+ * Arduino Water Sensor Example
+ * LED turns ON when no water is detected, OFF when water is detected.
+ */
 
 #define LED_PIN     2
 #define POWER_PIN   7
 #define SIGNAL_PIN  A5
-#define THRESHOLD   300
+#define THRESHOLD   300   // Water detection threshold
+#define SAMPLE_COUNT 10   // Number of samples for averaging
+#define LOOP_DELAY  500   // Delay between readings (ms)
 
 int value = 0;
 
@@ -14,8 +16,8 @@ void setup() {
   Serial.begin(9600);
   pinMode(LED_PIN, OUTPUT);
   pinMode(POWER_PIN, OUTPUT);
-  digitalWrite(POWER_PIN, LOW);
-  digitalWrite(LED_PIN, LOW);
+  digitalWrite(POWER_PIN, LOW); // Start with sensor OFF
+  digitalWrite(LED_PIN, LOW);   // Start with LED OFF
 }
 
 void turnSensorOn() {
@@ -28,12 +30,10 @@ void turnSensorOff() {
 
 int getAverageReading() {
   int total = 0;
-  const int numSamples = 10;
-  for (int i = 0; i < numSamples; i++) {
+  for (int i = 0; i < SAMPLE_COUNT; i++) {
     total += analogRead(SIGNAL_PIN);
-    delay(10);
   }
-  return total / numSamples;
+  return total / SAMPLE_COUNT;
 }
 
 void checkWater() {
@@ -48,10 +48,9 @@ void checkWater() {
 }
 
 void loop() {
-  turnSensorOn();
-  delay(10);
-  checkWater();
-  turnSensorOff();
-  delay(500); // Add delay to reduce sensor readings frequency
+  turnSensorOn();  // Power the sensor
+  delay(10);       // Stabilization delay
+  checkWater();    // Check sensor reading
+  turnSensorOff(); // Power down the sensor
+  delay(LOOP_DELAY); // Delay before the next loop
 }
-
